@@ -38,3 +38,12 @@ it("should execute the writeFile method", () => {
   expect(fs.writeFile).toBeCalledWith(testFilename, testData);
   // this is written with custom mock logic shown in vi.mock("path")
 });
+
+it("should return a promise that resolves to no value if called correctly", () => {
+  const testData = "test";
+  const testFilename = "test.txt";
+
+  writeData(testData, testFilename)
+
+  return expect(writeData(testData, testFilename)).resolves.toBeUndefined();
+});
