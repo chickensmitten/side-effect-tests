@@ -8,6 +8,18 @@ vi.mock("fs");
 // mock can mock any built in functions or third party functions.
 // mock prevents unnecessary writes to the production/staging database or runs expensive third party services
 
+vi.mock("path", () => {
+  return {
+    // default export is necessary
+    default: {
+      join: (...args) => {
+        return args[args.length - 1]
+        // get last element of the array
+      }
+    }
+  };
+});
+
 it("should execute the writeFile method", () => {
   const testData = "test";
   const testFilename = "test.txt";
@@ -19,7 +31,10 @@ it("should execute the writeFile method", () => {
   // and writing in files returns undefined.
   // this test is a problem because it really writes data. there are side effects.
 
-  expect(fs.writeFile).toBeCalled();
+  // expect(fs.writeFile).toBeCalled();
   // when writeData function is called and function fs mocked
   // this test then checks if the fs.writeFile inside it is called
+
+  expect(fs.writeFile).toBeCalledWith(testFilename, testData);
+  // this is written with custom mock logic shown in vi.mock("path")
 });
